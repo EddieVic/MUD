@@ -1,0 +1,8 @@
+Manifest-Version: 1.1
+Created-By: 1.8.0_91 (Oracle Corporation)
+Main-Class: mud.controller.MudFrame
+Name: mud
+Specification-Title: MUD
+Specification-Version: 0.1
+Implementation-Title: mud
+Implementation-Version: build1
