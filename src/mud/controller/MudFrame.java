@@ -1,12 +1,14 @@
 package mud.controller;
 
-//Import other parts of mud package
-import mud.view.ColumnPanel;
+import mud.model.Status;
 
 //Import Java GUI stuff
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
+import java.awt.Cursor;
 
 //Import observable stuff
 import java.util.Observer;
@@ -14,9 +16,15 @@ import java.util.Observable;
 
 //Import file IO handling
 import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
+import java.io.ObjectOutputStream;
 import java.io.IOException;
+
+//Import event stuff
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 /*
 * Class         MudFrame
@@ -24,75 +32,73 @@ import java.io.IOException;
 * Contributors  Eddie Vic
 * Public Methods:
 *     MudFrame()
+*     update(Observable o, Object arg)
+*     getChanged()
 */
 public class MudFrame extends JFrame implements Observer {
-	public MudFrame() {
-		//Load frame options file
-		FileInputStream in = null;
-		int width = 0;
-		int height = 0;
-		int options = 0;
-		try {
-			in = new FileInputStream("cfg/Frame.cfg");
-			width = (in.read() << 8) | (in.read());
-			height = (in.read() << 8) | (in.read());
-			options = in.read();
-			in.close();
-		}
-		catch (FileNotFoundException e) {
-			//File doesn't exist, create it with default options
-			try {
-				FileOutputStream f = new FileOutputStream("cfg/Frame.cfg");
-				//Width
-				f.write(800 >> 8);
-				f.write(800 & 0xFF);
-				//Height
-				f.write(600 >> 8);
-				f.write(600 & 0xFF);
-				// 0x01 = Maximized
-				f.write(0x01);
-				//Close the file
-				f.close();
-				
-				//Set to default options
-				width = 800;
-				height = 600;
-				options = 0x01;
-			}
-			catch (FileNotFoundException ex) {
-				System.err.println("File \'cfg/Frame.cfg\' could not be opened");
-				System.exit(1);
-			}
-			catch (IOException ex) {
-				System.err.println("Error writing to file \'cfg/Frame.cfg\'");
-				System.exit(1);
-			}
-		}
-		catch (IOException e) {
-			System.err.println("Error reading file \'cfg/Frame.cfg\'");
-			System.exit(1);
-		}
+    private Status status;
 
-		//Set frame options from file
-		setTitle("MUD");
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(width, height);
-		//If the maximized flag is set, maximize the window
-		if ((options & 0x01) == 0x01) {
-			setExtendedState(getExtendedState() | MAXIMIZED_BOTH);
-		}
+    public MudFrame() {
+        //Set constant frame options
+        setTitle("MUD");
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setSize(800, 600);
+        //If the maximized flag is set, maximize the window
+        if ((0x01) == 0x01) {
+            setExtendedState(getExtendedState() | MAXIMIZED_BOTH);
+        }
+        //Open icon and set as program icon
+        //setIconImage(Image i)
 
-		//////////////////////
-		ColumnPanel cp = new ColumnPanel();
-		add(cp);
+        //Adds the necessary listener
+        addWindowListener(new MudFrameWindow());
 
-		setVisible(true);
-	}
+        //Show the frame
+        setVisible(true);
+    }
 
-	public void update(Observable o, Object arg) {}
+    public void update(Observable o, Object arg) {}
 
-	public static void main(String[] args) {
-		MudFrame mf = new MudFrame();
-	}
+    public static void main(String[] args) {
+    	new MudFrame();
+    }
+
+    /*
+    * Class         MudFrameWindow
+    * Contained by  MudFrame
+    * Public Methods:
+    *     windowActivated(WindowEvent e)
+    *     windowClosed(WindowEvent e)
+    *     windowClosing(WindowEvent e)
+    *     windowDeactivated(WindowEvent e)
+    *     windowDeiconified(WindowEvent e)
+    *     windowIconified(WindowEvent e)
+    *     windowOpened(WindowEvent e)
+    * Notes:
+    *   Exists as a listener for MudFrame to find when the frame is 
+    */
+    private class MudFrameWindow implements WindowListener {
+        //Saves window settings when it is being closed
+        public void windowClosing(WindowEvent e) {
+        	try{
+	            FileOutputStream fos = new FileOutputStream("mud.cfg");
+	            ObjectOutputStream oos = new ObjectOutputStream(fos);
+	            oos.writeObject(MudFrame.this.status);
+	            oos.close();
+	            fos.close();
+	            System.exit(0);
+	        }
+        	//NEED TO CHANGE EXCEPTION TO ACTUALLY HANDLE IT
+	        catch (Exception ex) {}
+        }
+
+        //The rest are just because WindowListener has to be implemented
+        public void windowActivated(WindowEvent e) {}
+        public void windowClosed(WindowEvent e) {}
+        public void windowDeactivated(WindowEvent e) {}
+        public void windowDeiconified(WindowEvent e) {}
+        public void windowIconified(WindowEvent e) {}
+        public void windowOpened(WindowEvent e) {}
+    }
 }

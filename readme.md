@@ -8,7 +8,7 @@ Makefile
 MANIFEST.MF
 readme.md
 src/mud/controller/MudFrame.java
-src/mud/model/Controller.java
+src/mud/model/Status.java
 src/mud/view/ColumnPanel.java
 src/mud/view/MudPanel.java
 src/mud/view/RowPanel.java
@@ -16,7 +16,7 @@ src/mud/view/RowPanel.java
 ### Files after compilation
 cfg/Frame.cfg
 src/mud/controller/MudFrame.java
-src/mud/model/Controller.java
+src/mud/model/Status.java
 src/mud/view/ColumnPanel.java
 src/mud/view/MudPanel.java
 src/mud/view/RowPanel.java

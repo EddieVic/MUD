@@ -3,10 +3,10 @@
 
 # Compile flags
 JC=javac -d ./bin -cp ./bin
-JAR=jar -cmf ./MANIFEST.MF Mud.jar -C ./bin ./mud
+JAR=jar -cmf ./src/MANIFEST.MF Mud.jar -C ./bin ./mud
 
 # List of .class files
-CLASSFILES=bin/mud/controller/MudFrame.class bin/mud/model/Controller.class bin/mud/view/ColumnPanel.class bin/mud/view/MudPanel.class bin/mud/view/RowPanel.class
+CLASSFILES=bin/mud/controller/MudFrame.class bin/mud/model/Status.class bin/mud/view/ColumnPanel.class bin/mud/view/MudPanel.class bin/mud/view/RowPanel.class
 
 # Make these always execute
 .PHONY: all clean
@@ -15,11 +15,11 @@ CLASSFILES=bin/mud/controller/MudFrame.class bin/mud/model/Controller.class bin/
 all: Mud.jar
 
 # Compile each class file
-bin/mud/controller/MudFrame.class: src/mud/controller/MudFrame.java  bin/ bin/mud/view/ColumnPanel.class
+bin/mud/controller/MudFrame.class: src/mud/controller/MudFrame.java  bin/
 	$(JC) src/mud/controller/MudFrame.java
 
-bin/mud/model/Controller.class: src/mud/model/Controller.java bin/
-	$(JC) src/mud/model/Controller.java
+bin/mud/model/Status.class: src/mud/model/Status.java bin/ bin/mud/controller/MudFrame.class bin/mud/view/ColumnPanel.class bin/mud/view/RowPanel.class bin/mud/view/MudPanel.class
+	$(JC) src/mud/model/Status.java
 
 bin/mud/view/ColumnPanel.class: src/mud/view/ColumnPanel.java bin/
 	$(JC) src/mud/view/ColumnPanel.java
@@ -36,9 +36,10 @@ bin/:
 	/bin/mkdir bin
 
 # Compile the jar file with all the classes
-Mud.jar: $(CLASSFILES) MANIFEST.MF
+Mud.jar: $(CLASSFILES) src/MANIFEST.MF
 	$(JAR)
+	/bin/chmod +x Mud.jar
 
 # Delete all class files and the jar file
 clean:
-	/bin/rm -f -R bin Mud.jar cfg/Frame.cfg
+	/bin/rm -f -R bin Mud.jar mud.cfg
