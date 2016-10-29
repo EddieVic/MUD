@@ -3,7 +3,6 @@
 ## File list
 
 ### Source files
-cfg/DefualtFrame.cfg
 Makefile
 MANIFEST.MF
 readme.md
@@ -14,12 +13,15 @@ src/mud/view/MudPanel.java
 src/mud/view/RowPanel.java
 
 ### Files after compilation
-cfg/Frame.cfg
-src/mud/controller/MudFrame.java
-src/mud/model/Status.java
-src/mud/view/ColumnPanel.java
-src/mud/view/MudPanel.java
-src/mud/view/RowPanel.java
+bin/mud/controller/MudFrame.class
+bin/mud/model/Status.class
+bin/mud/view/ColumnPanel.class
+bin/mud/view/MudPanel.class
+bin/mud/view/RowPanel.class
+Mud.jar
+
+### Files created by running jar
+mud.cfg
 
 ---
 
