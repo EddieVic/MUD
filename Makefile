@@ -15,10 +15,10 @@ CLASSFILES=bin/mud/controller/MudFrame.class bin/mud/model/Status.class bin/mud/
 all: Mud.jar
 
 # Compile each class file
-bin/mud/controller/MudFrame.class: src/mud/controller/MudFrame.java  bin/
+bin/mud/controller/MudFrame.class: src/mud/controller/MudFrame.java  bin/ bin/mud/model/Status.class
 	$(JC) src/mud/controller/MudFrame.java
 
-bin/mud/model/Status.class: src/mud/model/Status.java bin/ bin/mud/controller/MudFrame.class bin/mud/view/ColumnPanel.class bin/mud/view/RowPanel.class bin/mud/view/MudPanel.class
+bin/mud/model/Status.class: src/mud/model/Status.java bin/ bin/mud/view/ColumnPanel.class
 	$(JC) src/mud/model/Status.java
 
 bin/mud/view/ColumnPanel.class: src/mud/view/ColumnPanel.java bin/

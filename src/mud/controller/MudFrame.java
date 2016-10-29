@@ -39,6 +39,9 @@ public class MudFrame extends JFrame implements Observer {
     private Status status;
 
     public MudFrame() {
+        //Load status
+        status = Status.getInstance();
+        
         //Set constant frame options
         setTitle("MUD");
         setLocationRelativeTo(null);
@@ -81,16 +84,8 @@ public class MudFrame extends JFrame implements Observer {
     private class MudFrameWindow implements WindowListener {
         //Saves window settings when it is being closed
         public void windowClosing(WindowEvent e) {
-        	try{
-	            FileOutputStream fos = new FileOutputStream("mud.cfg");
-	            ObjectOutputStream oos = new ObjectOutputStream(fos);
-	            oos.writeObject(MudFrame.this.status);
-	            oos.close();
-	            fos.close();
-	            System.exit(0);
-	        }
-        	//NEED TO CHANGE EXCEPTION TO ACTUALLY HANDLE IT
-	        catch (Exception ex) {}
+        	Status.save();
+            System.exit(0);
         }
 
         //The rest are just because WindowListener has to be implemented
