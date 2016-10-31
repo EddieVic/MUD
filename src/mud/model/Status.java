@@ -5,6 +5,7 @@ import java.util.Observer;
 import java.util.Observable;
 
 //Import file I/O stuff
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -32,9 +33,12 @@ public class Status extends Observable implements Serializable {
 
     //Instance variables
     private Dimension frameSize;
-    private Dimension[][] sizes;
     private int cols;
+    private int[] widths;
     private int[] rows;
+    private int[][] heights;
+
+    private PanelType types[][];
     /************************** End class variables **************************/
 
 
@@ -61,8 +65,12 @@ public class Status extends Observable implements Serializable {
             }
             //If the file could not be opened, load default settings
             catch (FileNotFoundException fnf) {
-                System.err.println("\'mud.cfg\' does not exist or could not be"
-                                   + " opened, loading defaults.");
+                //If the file exists, print an error
+                File f = new File("mud.cfg");
+                if (f.exists()) {
+                    System.err.println("\'mud.cfg\' could not be"
+                                       + " opened, loading defaults.");
+                }
                 status = new Status();
             }
             //If there was an error reading from the file, print error and load
@@ -116,13 +124,20 @@ public class Status extends Observable implements Serializable {
     /*Everything above this should be done except maybe more imports*/
     //Constructor, creates default settings
     private Status() {
-        //Dynamically get frame size
+        cols = 1;
+        widths = new int[1];
+        widths[0] = 100;
+        rows = new int[1];
+        rows[0] = 1;
+        heights = new int[1][];
+        heights[0] = new int[1];
+        heights[0][0] = 100;
         frameSize = null;
     }
 
     public void setFrameSize(Dimension d) {
         frameSize = d;
-    } 
+    }
 
     public Dimension getFrameSize() {
         return frameSize;
